@@ -19,7 +19,7 @@ public class Specifications {
         return requestBuilder;
     }
 
-    public static RequestSpecification superUserAuth() {
+    public static RequestSpecification superUserSpec() {
         var requestBuilder = reqBuilder();
         requestBuilder.setContentType(ContentType.JSON);
         requestBuilder.setAccept(ContentType.JSON);
@@ -37,6 +37,8 @@ public class Specifications {
 
     public static RequestSpecification authSpec(User user){
         var requestBuilder= reqBuilder();
+        requestBuilder.setContentType(ContentType.JSON);
+        requestBuilder.setAccept(ContentType.JSON);
         requestBuilder.setBaseUri("http://%s:%s@%s".formatted(user.getUsername()
                 , user.getPassword(), Config.getProperty("host")));
         return requestBuilder.build();

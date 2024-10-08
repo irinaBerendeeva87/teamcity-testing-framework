@@ -1,12 +1,14 @@
 package com.example.teamcity.api;
 
 import com.example.teamcity.api.enums.Endpoint;
-import com.example.teamcity.api.generators.RandomData;
-import com.example.teamcity.api.generators.TestDataGenerator;
+import com.example.teamcity.api.models.BuildType;
+import com.example.teamcity.api.models.Project;
 import com.example.teamcity.api.models.User;
 import com.example.teamcity.api.requests.checked.CheckedBase;
 import com.example.teamcity.api.spec.Specifications;
 import org.testng.annotations.Test;
+
+import java.util.concurrent.atomic.AtomicReference;
 
 import static com.example.teamcity.api.generators.TestDataGenerator.generate;
 import static io.qameta.allure.Allure.step;
@@ -18,13 +20,34 @@ public class BuildTypeTest extends BaseApiTest{
 
         step("Create user", () ->  {
 
-            var requester = new CheckedBase<User>(Specifications.superUserAuth(), Endpoint.USERS);
+            var requester = new CheckedBase<User>(Specifications.superUserSpec(), Endpoint.USERS);
 
             requester.create(user);
         });
-        step("Create project by user");
-        step("Create buildType for project by user");
-        step("Check buildType was created successfully with correct data");
+
+        var project = generate(Project.class);
+        AtomicReference<String> projectId = new AtomicReference<>("");
+
+        step("Create project by user", () ->  {
+            var requester = new CheckedBase<Project>(Specifications.authSpec(user),Endpoint.PROJECTS);
+            projectId.set(requester.create(project).getId());
+        });
+
+        var buildType = generate(BuildType.class);
+        buildType.setProject(Project.builder().id(projectId.get()).locator(null).build());
+
+        var requester = new CheckedBase<BuildType>(Specifications.authSpec(user),Endpoint.BUILD_TYPES);
+        AtomicReference<String> buildTypeId = new AtomicReference<>("");
+
+        step("Create buildType for project by user", () ->{
+            buildTypeId.set(requester.create(buildType).getId());
+
+        });
+
+        step("Check buildType was created successfully with correct data",() ->{
+             var createdBuildtype=  requester.read(buildTypeId.get());
+             softy.assertEquals(buildType.getName(), createdBuildtype.getName(), "Build type name is not correct ");
+        });
     }
 
     @Test(description = "User should not be able to create two build type with the same id", groups = {"Negative","CRUD"})
@@ -59,20 +82,4 @@ public class BuildTypeTest extends BaseApiTest{
         step("Create buildType for project1 by user2");
         step("Check buildType was not created with forbidden (403) code");
     }
-
- //       var user = User.builder()
- //               .username("admin")
- ////               .password("admin")
-  //              .build();
-//
-  //      String token= RestAssured
-  //              .given()
-  //              .spec(Specifications.getSpec().authSpec(user))
-  //              .get("/authenticationTest.html?crsf")
-  //              .then().assertThat().statusCode(HttpStatus.SC_OK)
-   //             .extract().asString();
-
-   //     System.out.println(token);
-
-   // }
 }
