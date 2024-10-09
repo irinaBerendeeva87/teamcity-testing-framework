@@ -84,7 +84,7 @@ public static <T extends BaseModel> T generate(List<BaseModel> generatedModels, 
 }
 
     public static TestData generate() {
-        //Go through all fields TestData and for each one who heir BaseModel call generate() c transfer of already generated entities
+        // Go through all fields TestData and for each one who heir BaseModel call generate() c transfer of already generated entities
         try {
             var instance = TestData.class.getDeclaredConstructor().newInstance();
             var generatedModels = new ArrayList<BaseModel>();
@@ -103,7 +103,7 @@ public static <T extends BaseModel> T generate(List<BaseModel> generatedModels, 
         }
     }
 
-    //Method to generate one entity. Passes an empty parameter generatedModels
+    // Method to generate one entity. Passes an empty parameter generatedModels
     public static <T extends BaseModel> T generate(Class<T> generatorClass, Object... parameters) {
         return generate(Collections.emptyList(), generatorClass, parameters);
     }
