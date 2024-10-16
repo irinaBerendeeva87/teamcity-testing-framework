@@ -78,8 +78,14 @@ public class BuildTypeTest extends BaseApiTest {
         anotherUser.setRoles(generate(Roles.class, "PROJECT_ADMIN", "p:" + anotherProject.getId()));
 
         superUserCheckRequests.<User>getRequest(USERS).create(anotherUser);
+        String projectId = testData.getProject().getId();
+        var expectedBody = """
+                Responding with error, status code: 403 (Forbidden).
+                Details: jetbrains.buildServer.serverSide.auth.AccessDeniedException: You do not have enough permissions to edit project with id: %s
+                Access denied. Check the user has enough permissions to perform the operation.""".formatted(projectId);
         new UncheckedBase(Specifications.authSpec(anotherUser), BUILD_TYPES)
                 .create(testData.getBuildType())
-                .then().assertThat().statusCode(HttpStatus.SC_FORBIDDEN);
+                .then ().assertThat().statusCode(HttpStatus.SC_FORBIDDEN)
+                .body(Matchers.containsString(expectedBody));
     }
 }
