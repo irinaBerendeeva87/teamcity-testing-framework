@@ -9,7 +9,7 @@ import com.example.teamcity.ui.pages.admin.CreateProjectPage;
 import com.example.teamcity.ui.pages.admin.ProjectPage;
 import org.testng.annotations.Test;
 
-@Test(groups = {"Regression"})
+@Test(groups = {"Regressions"})
 public class CreateProjectTest extends BaseUiTest {
     private static final String REPO_URL = "https://github.com/irinaBerendeeva87/test";
 

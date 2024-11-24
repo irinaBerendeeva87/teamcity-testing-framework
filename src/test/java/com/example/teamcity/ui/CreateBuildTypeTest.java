@@ -5,15 +5,13 @@ import com.example.teamcity.api.models.BuildType;
 import com.example.teamcity.api.models.BuildTypes;
 import com.example.teamcity.api.models.Project;
 import com.example.teamcity.ui.pages.admin.CreateBuildTypePage;
-import org.apache.http.HttpStatus;
 import org.testng.annotations.Test;
 
 import static com.codeborne.selenide.Selenide.webdriver;
-import static com.example.teamcity.api.enums.Endpoint.BUILD_TYPES;
 import static com.example.teamcity.api.enums.Endpoint.PROJECT_BUILD_TYPES;
 
 
-@Test(groups = {"Regression"})
+@Test(groups = {"Regressions"})
 public class CreateBuildTypeTest extends BaseUiTest {
     private static final String EXPECTED_URL_SEGMENT = "/admin/discoverRunners.html?init=1&id=buildType:";
     private static final String REPO_URL = "https://github.com/irinaBerendeeva87/test";
