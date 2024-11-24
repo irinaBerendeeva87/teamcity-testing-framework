@@ -18,6 +18,7 @@
         <aspectj.version>1.9.22</aspectj.version>
         <allure.version>2.27.0</allure.version>
         <jackson.version>2.17.2</jackson.version>
+        <selenide.version>7.5.0</selenide.version>
     </properties>
 
     <dependencies>
@@ -32,6 +33,12 @@
             <artifactId>selenide-testng</artifactId>
             <version>7.2.3</version>
             <scope>test</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.codeborne/selenide -->
+        <dependency>
+            <groupId>com.codeborne</groupId>
+            <artifactId>selenide</artifactId>
+            <version>${selenide.version}</version>
         </dependency>
         <dependency>
             <groupId>io.qameta.allure</groupId>
