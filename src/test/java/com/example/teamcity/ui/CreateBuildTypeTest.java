@@ -5,20 +5,16 @@ import com.example.teamcity.api.models.BuildType;
 import com.example.teamcity.api.models.BuildTypes;
 import com.example.teamcity.api.models.Project;
 import com.example.teamcity.ui.pages.admin.CreateBuildTypePage;
-import org.apache.http.HttpStatus;
 import org.testng.annotations.Test;
 
 import static com.codeborne.selenide.Selenide.webdriver;
-import static com.example.teamcity.api.enums.Endpoint.BUILD_TYPES;
 import static com.example.teamcity.api.enums.Endpoint.PROJECT_BUILD_TYPES;
 
 
-@Test(groups = {"Regression"})
+@Test(groups = {"Regressions"})
 public class CreateBuildTypeTest extends BaseUiTest {
     private static final String EXPECTED_URL_SEGMENT = "/admin/discoverRunners.html?init=1&id=buildType:";
     private static final String REPO_URL = "https://github.com/irinaBerendeeva87/test";
-
-    private Project createdProject;
 
     @Test(description = "User should  be able to create build configuration with build configuration name", groups = {"Positive"})
     public void userCreatesBuildTypeWithBuildTypeName() {
@@ -44,12 +40,13 @@ public class CreateBuildTypeTest extends BaseUiTest {
 
     @Test(description = "User should not be able to create build configuration without build configuration name", groups = {"Negative"})
     public void userCreatesBuildTypeWithoutBuildTypeName() {
-        var initialBuildTypesCount = superUserCheckRequests.<BuildTypes>getRequest(PROJECT_BUILD_TYPES)
-                .read(createdProject.getId() + "/buildTypes").getCount();
 
         createProject();
         var createdProject = superUserCheckRequests.<Project>getRequest(Endpoint.PROJECTS)
                 .read("name:" + testData.getProject().getName());
+
+        var initialBuildTypesCount = superUserCheckRequests.<BuildTypes>getRequest(PROJECT_BUILD_TYPES)
+                .read(createdProject.getId() + "/buildTypes").getCount();
 
         var getProjectId = testData.getProject().getId();
         loginAs(testData.getUser());
